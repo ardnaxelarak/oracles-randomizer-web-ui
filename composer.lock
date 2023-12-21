@@ -4,8 +4,28 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9c491b8531eec05ba41a11d9276a5749",
+    "content-hash": "1acb41a140fdbd6c8b8da3c97909ff0c",
     "packages": [
+        {
+            "name": "3party/flips",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Alcaro/Flips",
+                "reference": "fdd5c6e34285beef5b9be759c9b91390df486c66"
+            },
+            "type": "library"
+        },
+        {
+            "name": "3party/wla-dx",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/Stewmath/wla-dx",
+                "reference": "f1973f38081cfff3d7c46c1de4c125c07116738d"
+            },
+            "type": "library"
+        },
         {
             "name": "brick/math",
             "version": "0.11.0",
