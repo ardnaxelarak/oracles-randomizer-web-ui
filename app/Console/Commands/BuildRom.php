@@ -2,7 +2,10 @@
 
 namespace App\Console\Commands;
 
+use App\Models\BasePatch;
+use App\Support\Flips;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Storage;
 use Symfony\Component\Process\Process;
 
 class BuildRom extends Command
@@ -12,20 +15,25 @@ class BuildRom extends Command
      *
      * @var string
      */
-    protected $signature = 'oracle:build-rom {--show-build : Show outputs of build commands}';
+    protected $signature = 'oracle:build-roms {--show-build : Show outputs of build commands}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Build the rom as modified for the randomizer';
+    protected $description = 'Build the roms as modified for the randomizer and save the patches';
 
     /**
      * Execute the console command.
      */
     public function handle() {
-        $this->info("Building rom");
+        $this->buildRom();
+        $this->savePatches();
+    }
+
+    private function buildRom() {
+        $this->info("Building roms");
 
         $path = base_path("vendor/3party/wla-dx/build/binaries");
 
@@ -36,10 +44,42 @@ class BuildRom extends Command
         ], base_path("vendor/oracles/disasm"));
 
         if ($this->runProc($proc)) {
-            $this->info("Built rom successfully.");
+            $this->info("Built roms successfully.");
         } else {
-            $this->error("Unable to build rom.");
+            $this->error("Unable to build roms.");
         }
+    }
+
+    private function savePatches() {
+        $ages_hash = md5(file_get_contents('vendor/oracles/disasm/ages.gbc'));
+        $seasons_hash = md5(file_get_contents('vendor/oracles/disasm/seasons.gbc'));
+
+        $prev_patch = BasePatch::orderBy('id', 'desc')->first();
+
+        if ($prev_patch) {
+            if ($prev_patch->ages_hash == $ages_hash && $prev_patch->seasons_hash == $seasons_hash) {
+                $this->info("No changes to roms. Aborting.");
+                return;
+            }
+        }
+
+        $build = time();
+
+        $flips = resolve(Flips::class);
+
+        $storage = Storage::disk('s3');
+        $storage->put("basepatch/$build/ages.bps", $flips->createBps('roms/ages.gbc', 'vendor/oracles/disasm/ages.gbc'));
+        $storage->put("basepatch/$build/seasons.bps", $flips->createBps('roms/seasons.gbc', 'vendor/oracles/disasm/seasons.gbc'));
+        $storage->put("basepatch/$build/ages.sym", file_get_contents(base_path('vendor/oracles/disasm/ages.sym')));
+        $storage->put("basepatch/$build/seasons.sym", file_get_contents(base_path('vendor/oracles/disasm/seasons.sym')));
+
+        $new_patch = new BasePatch;
+        $new_patch->build = $build;
+        $new_patch->ages_hash = $ages_hash;
+        $new_patch->seasons_hash = $seasons_hash;
+        $new_patch->save();
+
+        $this->info("Patches created.");
     }
 
     private function runProc(Process $proc) {
