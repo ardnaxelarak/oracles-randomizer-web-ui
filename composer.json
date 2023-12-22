@@ -11,7 +11,9 @@
         "laravel/sanctum": "^3.3",
         "laravel/tinker": "^2.8",
         "3party/flips": "*",
-        "3party/wla-dx": "*"
+        "3party/wla-dx": "*",
+        "oracles/disasm": "*",
+        "oracles/randomizer": "*"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",
@@ -44,6 +46,30 @@
             "url": "https://github.com/Stewmath/wla-dx",
             "type": "git",
             "reference": "f1973f38081cfff3d7c46c1de4c125c07116738d"
+          }
+        }
+      },
+      {
+        "type": "package",
+        "package": {
+          "name": "oracles/disasm",
+          "version": "1.0.0",
+          "source": {
+            "url": "https://github.com/ardnaxelarak/oracles-disasm",
+            "type": "git",
+            "reference": "660b58b8d8c30136dcf16c1ea0404653084f6ab6"
+          }
+        }
+      },
+      {
+        "type": "package",
+        "package": {
+          "name": "oracles/randomizer",
+          "version": "1.0.0",
+          "source": {
+            "url": "https://github.com/ardnaxelarak/oracles-randomizer-ng",
+            "type": "git",
+            "reference": "07b860e1e2459ec4d0aeb09ca5208ab8594c270a"
           }
         }
       }
