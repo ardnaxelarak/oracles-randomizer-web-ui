@@ -34,8 +34,8 @@ class Flips
             base_path("vendor/3party/flips/flips"),
             '--create',
             '--bps',
-            base_path($original),
-            base_path($modified),
+            $original,
+            $modified,
             $tmp_file,
         ]);
 
@@ -57,7 +57,6 @@ class Flips
             throw new \Exception('BPS data creation failed');
         }
 
-        // return unpack("N*", $bps_string);
         return $bps_string;
     }
 }

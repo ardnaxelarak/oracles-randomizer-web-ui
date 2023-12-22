@@ -9,6 +9,7 @@
         "3party/flips": "*",
         "3party/wla-dx": "*",
         "guzzlehttp/guzzle": "^7.2",
+        "hashids/hashids": "^5.0",
         "laravel/framework": "^10.10",
         "laravel/sanctum": "^3.3",
         "laravel/tinker": "^2.8",
