@@ -5,6 +5,7 @@ namespace App;
 use App\Models\BasePatch;
 use App\Models\Seed;
 use App\Support\Flips;
+use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\Process\Process;
@@ -84,6 +85,7 @@ class Randomizer
         $seed->build = $basepatch->build;
         $seed->game = $game;
         $seed->generated = $generated;
+        $seed->metadata = $this->getMetadata();
         $seed->save();
 
         $hash = $seed->hash;
@@ -91,5 +93,26 @@ class Randomizer
         $storage = Storage::disk('s3');
         $storage->put("seeds/$hash-$generated.bps", $bps);
         $storage->put("seeds/$hash-$generated.log", $log);
+    }
+
+    private function getMetadata(): array {
+        $metadata = [
+            'settings' => [
+                'hard' => false,
+                'linked_items' => false,
+                'cross_items' => false,
+                'keysanity' => false,
+                'auto_mermaid' => false,
+                'dungeon_shuffle' => false,
+                'starting_items' => [],
+            ],
+            'race' => false,
+        ];
+
+        if ($this->game == Game::Seasons) {
+            Arr::set($metadata, 'settings.portal_shuffle', false);
+        }
+
+        return $metadata;
     }
 }

@@ -9,12 +9,11 @@ class Seed extends Model
 {
     public $timestamps = false;
 
-    /**
-     * The attributes that are not mass assignable.
-     *
-     * @var array<int, string>
-     */
     protected $guarded = [];
+
+    protected $casts = [
+        'metadata' => 'array',
+    ];
 
     public static function boot() {
         parent::boot();

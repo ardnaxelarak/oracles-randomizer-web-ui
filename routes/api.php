@@ -1,6 +1,8 @@
 <?php
 
+use App\Models\Seed;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,6 +16,45 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::get('/base_patches/{build}/{game}', function (string $build, string $game) {
+    $s3 = Storage::disk('s3');
+    $bps = $s3->get("basepatch/$build/$game.bps");
+    if ($bps) {
+        return response($bps)->header('Content-Type', 'application/octet-stream');
+    }
+
+    abort(404);
+});
+
+
+Route::get('/seeds/{hash}', function (string $hash) {
+    $seed = Seed::where('hash', $hash)->first();
+
+    if ($seed) {
+        $generated = $seed->generated;
+
+        $s3 = Storage::disk('s3');
+        $bps = $s3->get("seeds/$hash-$generated.bps");
+        if ($bps) {
+            return response($bps)->header('Content-Type', 'application/octet-stream');
+        }
+    }
+
+    abort(404);
+});
+
+Route::get('/logs/{hash}', function (string $hash) {
+    $seed = Seed::where('hash', $hash)->first();
+
+    if ($seed) {
+        $generated = $seed->generated;
+
+        $s3 = Storage::disk('s3');
+        $bps = $s3->get("seeds/$hash-$generated.log");
+        if ($bps) {
+            return response($bps)->header('Content-Type', 'text/plain');
+        }
+    }
+
+    abort(404);
 });

@@ -10,6 +10,7 @@
         "3party/wla-dx": "*",
         "guzzlehttp/guzzle": "^7.2",
         "hashids/hashids": "^5.0",
+        "inertiajs/inertia-laravel": "^0.6.11",
         "laravel/framework": "^10.10",
         "laravel/sanctum": "^3.3",
         "laravel/tinker": "^2.8",
@@ -59,7 +60,7 @@
           "source": {
             "url": "https://github.com/ardnaxelarak/oracles-disasm",
             "type": "git",
-            "reference": "660b58b8d8c30136dcf16c1ea0404653084f6ab6"
+            "reference": "998b36abefe795251f318959598b73df30f4ea21"
           }
         }
       },
@@ -71,7 +72,7 @@
           "source": {
             "url": "https://github.com/ardnaxelarak/oracles-randomizer-ng",
             "type": "git",
-            "reference": "07b860e1e2459ec4d0aeb09ca5208ab8594c270a"
+            "reference": "343b601068b9419fa32477d396667c2c0c338b1d"
           }
         }
       }

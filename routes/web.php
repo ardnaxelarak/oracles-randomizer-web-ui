@@ -1,6 +1,8 @@
 <?php
 
+use App\Models\Seed;
 use Illuminate\Support\Facades\Route;
+use Inertia\Inertia;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,5 +16,27 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
-});
+    return view('app');
+})->name('application');
+
+Route::get('h/{hash}', static function ($hash) {
+    $seed = Seed::where('hash', $hash)->first();
+    if ($seed) {
+        $generated = $seed->generated;
+
+        $s3 = Storage::disk('s3');
+        $bps = $s3->get("seeds/$hash-$generated.bps");
+        $spoiler = $s3->get("seeds/$hash-$generated.log");
+
+        if ($bps) {
+            return Inertia::render('SeedPage', [
+                'hash' => $hash,
+                'build' => $seed->build,
+                'game' => $seed->game,
+                'metadata' => $seed->metadata,
+                'spoiler' => $spoiler,
+            ]);
+        }
+    }
+    abort(404);
+})->name('application');
