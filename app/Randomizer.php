@@ -29,17 +29,17 @@ class Randomizer
      *
      * @return void
      */
-    public function __construct(Game $game, array $flags) {
+    public function __construct(Game $game, array $settings) {
         $this->game = $game;
-        $this->flags = $flags;
+        $this->metadata = $this->getMetadata($settings);
     }
 
     /**
      * Runs the randomizer.
      *
-     * @return void
+     * @return string
      */
-    public function randomize() {
+    public function randomize(): string {
         $tmp_file = tempnam(sys_get_temp_dir(), 'randomizer-');
         if ($tmp_file === false) {
             throw new \Exception('Unable to create tmp file');
@@ -51,7 +51,7 @@ class Randomizer
             [
                 base_path("vendor/oracles/randomizer/oracles-randomizer-ng-plus"),
             ],
-            $this->flags,
+            $this->getFlags(),
             [
                 base_path("vendor/oracles/disasm/$game.gbc"),
                 $tmp_file,
@@ -61,7 +61,9 @@ class Randomizer
         $proc = new Process($flags, base_path("vendor/oracles/randomizer"));
 
         Log::debug($proc->getCommandLine());
-        $proc->run();
+        $proc->run(function ($type, $buffer) {
+            Log::debug((Process::ERR === $type) ? "ERR > $buffer" : "OUT > $buffer");
+        });
 
         if (!$proc->isSuccessful()) {
             Log::debug($proc->getOutput());
@@ -74,7 +76,7 @@ class Randomizer
 
         $flips = resolve(Flips::class);
 
-        $bps = $flips->createBps("vendor/oracles/disasm/$game.gbc", $tmp_file);
+        $bps = $flips->createBps(base_path("vendor/oracles/disasm/$game.gbc"), $tmp_file);
         $log = file_get_contents("${tmp_file}_log.txt");
 
         // cleanup
@@ -85,7 +87,7 @@ class Randomizer
         $seed->build = $basepatch->build;
         $seed->game = $game;
         $seed->generated = $generated;
-        $seed->metadata = $this->getMetadata();
+        $seed->metadata = $this->metadata;
         $seed->save();
 
         $hash = $seed->hash;
@@ -93,24 +95,59 @@ class Randomizer
         $storage = Storage::disk('s3');
         $storage->put("seeds/$hash-$generated.bps", $bps);
         $storage->put("seeds/$hash-$generated.log", $log);
+
+        return $hash;
     }
 
-    private function getMetadata(): array {
+    private function getFlags(): array {
+        $flags = [];
+
+        if (Arr::get($this->metadata, 'settings.hard', false)) {
+            $this->flags[] = '-hard';
+        }
+        if (Arr::get($this->metadata, 'settings.linked_items', false)) {
+            $this->flags[] = '-linkeditems';
+        }
+        if (Arr::get($this->metadata, 'settings.cross_items', false)) {
+            $this->flags[] = '-crossitems';
+        }
+        if (Arr::get($this->metadata, 'settings.keysanity', false)) {
+            $flags[] = '-keysanity';
+        }
+        if (Arr::get($this->metadata, 'settings.auto_mermaid', false)) {
+            $flags[] = '-automermaid';
+        }
+        if (Arr::get($this->metadata, 'settings.dungeon_shuffle', false)) {
+            $flags[] = '-dungeons';
+        }
+        if (Arr::get($this->metadata, 'settings.portal_shuffle', false)) {
+            $flags[] = '-portals';
+        }
+
+        if (count($this->metadata['settings']['starting_items']) > 0) {
+            $itemlist = implode(',', $this->metadata['settings']['starting_items']);
+            $flags[] = "-starting=$itemlist";
+        }
+
+        return $flags;
+    }
+
+    private function getMetadata(array $settings): array {
         $metadata = [
             'settings' => [
-                'hard' => false,
-                'linked_items' => false,
-                'cross_items' => false,
-                'keysanity' => false,
-                'auto_mermaid' => false,
-                'dungeon_shuffle' => false,
-                'starting_items' => [],
+                'hard' => Arr::get($settings, 'hard', false),
+                'linked_items' => Arr::get($settings, 'linked_items', false),
+                'cross_items' => Arr::get($settings, 'cross_items', false),
+                'keysanity' => Arr::get($settings, 'keysanity', false),
+                'auto_mermaid' => Arr::get($settings, 'auto_mermaid', false),
+                'dungeon_shuffle' => Arr::get($settings, 'dungeon_shuffle', false),
+                'starting_items' => Arr::get($settings, 'starting_items', []),
             ],
             'race' => false,
         ];
 
         if ($this->game == Game::Seasons) {
-            Arr::set($metadata, 'settings.portal_shuffle', false);
+            Arr::set($metadata, 'settings.portal_shuffle', Arr::get($settings, 'portal_shuffle', false));
         }
 
         return $metadata;

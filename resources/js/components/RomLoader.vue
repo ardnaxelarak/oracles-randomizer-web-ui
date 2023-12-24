@@ -15,6 +15,9 @@ export default defineComponent({
     rom_name: "",
     crc: "",
   },
+  emits: [
+    'rom_update',
+  ],
   computed: {
     rom_display() {
       return `Oracle of ${this.rom_name.charAt(0).toUpperCase()}${this.rom_name.slice(1)}`;

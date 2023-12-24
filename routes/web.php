@@ -39,4 +39,8 @@ Route::get('h/{hash}', static function ($hash) {
         }
     }
     abort(404);
-})->name('application');
+});
+
+Route::get('generate', static function () {
+    return Inertia::render('GenerationPage', []);
+});

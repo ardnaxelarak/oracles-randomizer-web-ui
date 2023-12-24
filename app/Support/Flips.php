@@ -22,7 +22,7 @@ class Flips
      */
     public function createBps(string $original, string $modified): string {
         if (!is_readable($modified) || !is_readable($original)) {
-            throw new \Exception('Source Files not readable');
+            throw new \Exception('Source files not readable');
         }
 
         $tmp_file = tempnam(sys_get_temp_dir(), 'flips-');

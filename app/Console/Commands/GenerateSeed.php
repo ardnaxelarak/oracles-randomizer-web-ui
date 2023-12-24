@@ -27,7 +27,18 @@ class GenerateSeed extends Command
      */
     public function handle() {
         $game = Game::parse($this->argument('game'));
-        $rand = new Randomizer($game, array());
+        $settings = [
+            'cross_items' => true,
+            'linked_items' => true,
+            'auto_mermaid' => true,
+            'dungeon_shuffle' => true,
+            'starting_items' => [
+                'sword',
+                'treasure map',
+                'bracelet',
+            ],
+        ];
+        $rand = new Randomizer($game, $settings);
         $rand->randomize();
     }
 }

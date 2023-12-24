@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\RandomizerController;
 use App\Models\Seed;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -58,3 +59,5 @@ Route::get('/logs/{hash}', function (string $hash) {
 
     abort(404);
 });
+
+Route::post('/generate', [RandomizerController::class, 'generateSeed']);

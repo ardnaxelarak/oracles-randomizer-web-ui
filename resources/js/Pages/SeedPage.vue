@@ -10,8 +10,19 @@
       <li v-if="game == 'Seasons'" class="list-group-item">
         <RomLoader rom_name="seasons" crc="D7E9F5D7" @rom_update="romUpdated" />
       </li>
-      <li v-if="metadata?.settings?.hard != null" class="list-group-item">
-        Difficulty: {{ metadata.settings.hard ? "Hard" : "Normal" }}
+      <li class="list-group-item">
+        <div v-if="metadata?.settings?.hard != null">
+          Difficulty: {{ metadata.settings.hard ? "Hard" : "Normal" }}
+        </div>
+        <div v-if="metadata?.settings?.keysanity">
+          Keysanity
+        </div>
+        <div v-if="metadata?.settings?.dungeon_shuffle">
+          Dungeon Shuffle
+        </div>
+        <div v-if="metadata?.settings?.portal_shuffle">
+          Portal Shuffle
+        </div>
       </li>
       <li class="list-group-item">
         <button type="submit" class="btn btn-primary submit-btn" :disabled="!rom" @click="download">
@@ -41,7 +52,6 @@ export default defineComponent({
     hash: "",
     game: "",
     build: null,
-    bps: null,
     metadata: {},
     spoiler: null,
   },

@@ -16,7 +16,8 @@
         "laravel/tinker": "^2.8",
         "league/flysystem-aws-s3-v3": "^3.0",
         "oracles/disasm": "*",
-        "oracles/randomizer": "*"
+        "oracles/randomizer": "*",
+        "symfony/yaml": "^6.4"
     },
     "require-dev": {
         "fakerphp/faker": "^1.9.1",
