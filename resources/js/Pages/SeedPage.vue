@@ -14,14 +14,23 @@
         <div v-if="metadata?.settings?.hard != null">
           Difficulty: {{ metadata.settings.hard ? "Hard" : "Normal" }}
         </div>
-        <div v-if="metadata?.settings?.keysanity">
-          Keysanity
+        <div v-if="metadata?.settings?.cross_items != null">
+          Cross Items: {{ metadata.settings.cross_items ? "True" : "False" }}
         </div>
-        <div v-if="metadata?.settings?.dungeon_shuffle">
-          Dungeon Shuffle
+        <div v-if="metadata?.settings?.linked_items != null">
+          Linked Items: {{ metadata.settings.linked_items ? "True" : "False" }}
         </div>
-        <div v-if="metadata?.settings?.portal_shuffle">
-          Portal Shuffle
+        <div v-if="metadata?.settings?.keysanity != null">
+          Keysanity: {{ metadata.settings.keysanity ? "True" : "False" }}
+        </div>
+        <div v-if="metadata?.settings?.dungeon_shuffle != null">
+          Dungeon Shuffle: {{ metadata.settings.dungeon_shuffle ? "True" : "False" }}
+        </div>
+        <div v-if="metadata?.settings?.portal_shuffle != null">
+          Portal Shuffle: {{ metadata.settings.portal_shuffle ? "True" : "False" }}
+        </div>
+        <div v-if="metadata?.settings?.starting_items != null">
+          Starting Items: {{ metadata.settings.starting_items.length > 0 ? metadata.settings.starting_items.join(", ") : "None" }}
         </div>
       </li>
       <li class="list-group-item">

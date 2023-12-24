@@ -44,6 +44,10 @@
           <input class="form-check-input" type="checkbox" role="switch" id="starting_sword" v-model="starting_sword">
           <label class="form-check-label" for="starting_sword">Starting Sword</label>
         </div>
+        <div class="form-check form-switch" v-if="game == 'seasons'">
+          <input class="form-check-input" type="checkbox" role="switch" id="starting_treasure_map" v-model="starting_treasure_map">
+          <label class="form-check-label" for="starting_treasure_map">Starting Treasure Map</label>
+        </div>
       </li>
       <li class="list-group-item">
         <button type="submit" class="btn btn-primary submit-btn" :disabled="generating" @click="generate">
@@ -72,6 +76,7 @@ export default defineComponent({
       portal_shuffle: false,
       auto_mermaid: false,
       starting_sword: false,
+      starting_treasure_map: false,
     };
   },
   methods: {
@@ -84,6 +89,9 @@ export default defineComponent({
           const starting_items = [];
           if (this.starting_sword) {
             starting_items.push("sword");
+          }
+          if (this.game == 'seasons' && this.starting_treasure_map) {
+            starting_items.push("treasure map");
           }
           const settings = {
              game: this.game,
