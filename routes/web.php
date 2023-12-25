@@ -16,8 +16,8 @@ use Inertia\Inertia;
 */
 
 Route::get('/', function () {
-    return view('app');
-})->name('application');
+    return redirect('/generate');
+});
 
 Route::get('h/{hash}', static function ($hash) {
     $seed = Seed::where('hash', $hash)->first();

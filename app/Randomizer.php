@@ -31,6 +31,7 @@ class Randomizer
      */
     public function __construct(Game $game, array $settings) {
         $this->game = $game;
+        Log::debug($settings);
         $this->metadata = $this->getMetadata($settings);
     }
 
@@ -103,13 +104,13 @@ class Randomizer
         $flags = [];
 
         if (Arr::get($this->metadata, 'settings.hard', false)) {
-            $this->flags[] = '-hard';
+            $flags[] = '-hard';
         }
         if (Arr::get($this->metadata, 'settings.linked_items', false)) {
-            $this->flags[] = '-linkeditems';
+            $flags[] = '-linkeditems';
         }
         if (Arr::get($this->metadata, 'settings.cross_items', false)) {
-            $this->flags[] = '-crossitems';
+            $flags[] = '-crossitems';
         }
         if (Arr::get($this->metadata, 'settings.keysanity', false)) {
             $flags[] = '-keysanity';
@@ -125,7 +126,7 @@ class Randomizer
         }
 
         if (count($this->metadata['settings']['starting_items']) > 0) {
-            $itemlist = implode(',', $this->metadata['settings']['starting_items']);
+            $itemlist = implode(';', $this->metadata['settings']['starting_items']);
             $flags[] = "-starting=$itemlist";
         }
 

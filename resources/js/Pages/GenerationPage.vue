@@ -97,9 +97,10 @@ export default defineComponent({
              game: this.game,
              hard: this.hard,
              cross_items: this.cross_items,
-             linked_items: this.linked_item,
+             linked_items: this.linked_items,
              keysanity: this.keysanity,
              dungeon_shuffle: this.dungeon_shuffle,
+             auto_mermaid: this.auto_mermaid,
              starting_items: starting_items,
           };
           if (this.game == 'seasons') {

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5c29dbf99e0b07efbedbca1098f91bad",
+    "content-hash": "75a71f5291a94b6f284c1cdf962d5dce",
     "packages": [
         {
             "name": "3party/flips",
@@ -2842,7 +2842,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ardnaxelarak/oracles-disasm",
-                "reference": "998b36abefe795251f318959598b73df30f4ea21"
+                "reference": "6effc15927ac19743040713db685714112ec3f36"
             },
             "type": "library"
         },
@@ -2852,7 +2852,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/ardnaxelarak/oracles-randomizer-ng",
-                "reference": "343b601068b9419fa32477d396667c2c0c338b1d"
+                "reference": "c7d889e90404ade65472f23f39169a240ddfdda1"
             },
             "type": "library"
         },

@@ -29,6 +29,9 @@
         <div v-if="metadata?.settings?.portal_shuffle != null">
           Portal Shuffle: {{ metadata.settings.portal_shuffle ? "True" : "False" }}
         </div>
+        <div v-if="metadata?.settings?.auto_mermaid != null">
+          Auto Mermaid Suit: {{ metadata.settings.auto_mermaid ? "True" : "False" }}
+        </div>
         <div v-if="metadata?.settings?.starting_items != null">
           Starting Items: {{ metadata.settings.starting_items.length > 0 ? metadata.settings.starting_items.join(", ") : "None" }}
         </div>
