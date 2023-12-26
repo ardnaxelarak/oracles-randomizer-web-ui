@@ -112,6 +112,9 @@ class Randomizer
         if (Arr::get($this->metadata, 'settings.cross_items', false)) {
             $flags[] = '-crossitems';
         }
+        if (Arr::get($this->metadata, 'settings.maple_item', false)) {
+            $flags[] = '-maple';
+        }
         if (Arr::get($this->metadata, 'settings.keysanity', false)) {
             $flags[] = '-keysanity';
         }
@@ -139,6 +142,7 @@ class Randomizer
                 'hard' => Arr::get($settings, 'hard', false),
                 'linked_items' => Arr::get($settings, 'linked_items', false),
                 'cross_items' => Arr::get($settings, 'cross_items', false),
+                'maple_item' => Arr::get($settings, 'maple_item', false),
                 'keysanity' => Arr::get($settings, 'keysanity', false),
                 'auto_mermaid' => Arr::get($settings, 'auto_mermaid', false),
                 'dungeon_shuffle' => Arr::get($settings, 'dungeon_shuffle', false),

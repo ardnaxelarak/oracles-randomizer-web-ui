@@ -20,6 +20,9 @@
         <div v-if="metadata?.settings?.linked_items != null">
           Linked Items: {{ metadata.settings.linked_items ? "True" : "False" }}
         </div>
+        <div v-if="metadata?.settings?.maple_item != null">
+          Maple Item: {{ metadata.settings.maple_item ? "True" : "False" }}
+        </div>
         <div v-if="metadata?.settings?.keysanity != null">
           Keysanity: {{ metadata.settings.keysanity ? "True" : "False" }}
         </div>
@@ -37,11 +40,26 @@
         </div>
       </li>
       <li class="list-group-item">
-        <button type="submit" class="btn btn-primary submit-btn" :disabled="!rom" @click="download">
-          Download
-        </button>
-        <a id="downloader" style="display: none;" />
+        <div>
+          Custom sprites are a work in progress and may appear buggy. Use at your own risk.
+        </div>
+        <label class="form-label" for="sprite_select">Player Sprite</label>
+        <select id="sprite_select" class="form-select" v-model="sprite">
+          <option value="link">Link</option>
+          <option value="marin">Marin</option>
+        </select>
       </li>
+      <li class="list-group-item">
+        <button type="submit" class="btn btn-primary submit-btn" :disabled="!rom" @click="download">
+          Download ROM
+        </button>
+      </li>
+      <li class="list-group-item">
+        <button type="submit" class="btn btn-primary submit-btn" @click="downloadSpoiler">
+          Download Spoiler
+        </button>
+      </li>
+      <a id="downloader" style="display: none;" />
     </ul>
   </div>
 </template>
@@ -54,6 +72,7 @@ import CRC32 from 'crc-32';
 import localforage from 'localforage';
 
 import BPS from '@/patching/BPS.js';
+import IPS from '@/patching/IPS.js';
 import RomLoader from '../components/RomLoader.vue';
 
 export default defineComponent({
@@ -70,6 +89,7 @@ export default defineComponent({
   data() {
     return {
       rom: null,
+      sprite: "link",
     };
   },
   methods: {
@@ -104,10 +124,23 @@ export default defineComponent({
         }.bind(this)
       );
     },
+    getSpritePatch() {
+      return new Promise(
+        function(resolve, reject) {
+          axios
+            .get(`/api/sprites/${this.sprite}/${this.build}/${this.game.toLowerCase()}`, {responseType: 'arraybuffer'})
+            .then(response => {
+              resolve(new IPS(new Uint8Array(response.data)));
+            })
+            .catch(error => {
+              reject(error);
+            });
+        }.bind(this)
+      );
+    },
     async download() {
       var output = this.rom;
       const basepatch = await this.getBasePatch();
-      console.log(basepatch);
       const base_bps = new BPS(basepatch);
       output = base_bps.apply(output);
 
@@ -115,10 +148,21 @@ export default defineComponent({
       const bps = new BPS(seedpatch);
       output = bps.apply(output);
 
+      if (this.sprite != "link") {
+        const patch = await this.getSpritePatch();
+        output = patch.apply(output);
+      }
+
       const blob = new Blob([output], { type: 'octet/stream' });
       const link = document.getElementById('downloader');
       link.href = URL.createObjectURL(blob);
       link.download = `OO${this.game.charAt(0)}_${this.hash}.gbc`;
+      link.click();
+    },
+    downloadSpoiler() {
+      const link = document.getElementById('downloader');
+      link.href = `/api/logs/${this.hash}`;
+      link.download = `OO${this.game.charAt(0)}_${this.hash}_spoiler.txt`;
       link.click();
     },
   },

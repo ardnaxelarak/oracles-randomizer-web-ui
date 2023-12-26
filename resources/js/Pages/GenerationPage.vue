@@ -25,6 +25,10 @@
           <label class="form-check-label" for="linked_items">Linked Items</label>
         </div>
         <div class="form-check form-switch">
+          <input class="form-check-input" type="checkbox" role="switch" id="maple_item" v-model="maple_item">
+          <label class="form-check-label" for="maple_item">Include Maple Item</label>
+        </div>
+        <div class="form-check form-switch">
           <input class="form-check-input" type="checkbox" role="switch" id="keysanity" v-model="keysanity">
           <label class="form-check-label" for="keysanity">Keysanity</label>
         </div>
@@ -71,6 +75,7 @@ export default defineComponent({
       hard: false,
       cross_items: false,
       linked_items: false,
+      maple_item: false,
       keysanity: false,
       dungeon_shuffle: false,
       portal_shuffle: false,
@@ -98,6 +103,7 @@ export default defineComponent({
              hard: this.hard,
              cross_items: this.cross_items,
              linked_items: this.linked_items,
+             maple_item: this.maple_item,
              keysanity: this.keysanity,
              dungeon_shuffle: this.dungeon_shuffle,
              auto_mermaid: this.auto_mermaid,
