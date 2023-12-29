@@ -11,6 +11,9 @@
         <RomLoader rom_name="seasons" crc="D7E9F5D7" @rom_update="romUpdated" />
       </li>
       <li class="list-group-item">
+        <div>
+          Rom Build Date: {{ romDate }}
+        </div>
         <div v-if="metadata?.settings?.hard != null">
           Difficulty: {{ metadata.settings.hard ? "Hard" : "Normal" }}
         </div>
@@ -107,6 +110,12 @@ export default defineComponent({
       palette: "green",
       heart_beeps: true,
     };
+  },
+  computed: {
+    romDate() {
+      const date = new Date(this.build * 1000);
+      return date.toLocaleDateString();
+    },
   },
   methods: {
     romUpdated(rom) {
