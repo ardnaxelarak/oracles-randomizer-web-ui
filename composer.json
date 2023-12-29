@@ -61,7 +61,7 @@
           "source": {
             "url": "https://github.com/ardnaxelarak/oracles-disasm",
             "type": "git",
-            "reference": "892bdc285d6bcaedf27faac77ddc574c7bf011fe"
+            "reference": "b94f3c3bb77b2a6de8be9e928f57144d8662883b"
           }
         }
       },
@@ -73,7 +73,7 @@
           "source": {
             "url": "https://github.com/ardnaxelarak/oracles-randomizer-ng",
             "type": "git",
-            "reference": "c6b5321e259ce6ae18ce42d9fcaa3c79c71fc9ae"
+            "reference": "919a3584daf1372d4d4e13d438ce9a02a22d141c"
           }
         }
       }

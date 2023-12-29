@@ -41,13 +41,27 @@
       </li>
       <li class="list-group-item">
         <div>
-          Custom sprites are a work in progress and may appear buggy. Use at your own risk.
+          Custom sprites are a work in progress but should be stable. Please report any issues you run into!
         </div>
         <label class="form-label" for="sprite_select">Player Sprite</label>
-        <select id="sprite_select" class="form-select" v-model="sprite">
+        <select id="sprite_select" autocomplete="off" class="form-select" v-model="sprite">
           <option value="link">Link</option>
           <option value="marin">Marin</option>
+          <option value="likelike">Like Like</option>
         </select>
+        <label class="form-label" for="palette_select">Player Sprite</label>
+        <select id="palette_select" autocomplete="off" class="form-select" v-model="palette">
+          <option value="green">Green</option>
+          <option value="blue">Blue</option>
+          <option value="gold">Gold</option>
+          <option value="red">Red</option>
+        </select>
+      </li>
+      <li class="list-group-item">
+        <div class="form-check form-switch">
+          <input class="form-check-input" type="checkbox" autocomplete="off" role="switch" id="heart_beeps" v-model="heart_beeps">
+          <label class="form-check-label" for="heart_beeps">Half-Speed Low Health Beep</label>
+        </div>
       </li>
       <li class="list-group-item">
         <button type="submit" class="btn btn-primary submit-btn" :disabled="!rom" @click="download">
@@ -90,6 +104,8 @@ export default defineComponent({
     return {
       rom: null,
       sprite: "link",
+      palette: "green",
+      heart_beeps: true,
     };
   },
   methods: {
@@ -128,7 +144,21 @@ export default defineComponent({
       return new Promise(
         function(resolve, reject) {
           axios
-            .get(`/api/sprites/${this.sprite}/${this.build}/${this.game.toLowerCase()}`, {responseType: 'arraybuffer'})
+            .get(`/api/sprites/${this.build}/${this.game.toLowerCase()}/${this.sprite}`, {responseType: 'arraybuffer'})
+            .then(response => {
+              resolve(new IPS(new Uint8Array(response.data)));
+            })
+            .catch(error => {
+              reject(error);
+            });
+        }.bind(this)
+      );
+    },
+    getPatch(patchName) {
+      return new Promise(
+        function(resolve, reject) {
+          axios
+            .get(`/api/patches/${this.build}/${this.game.toLowerCase()}/${patchName}`, {responseType: 'arraybuffer'})
             .then(response => {
               resolve(new IPS(new Uint8Array(response.data)));
             })
@@ -150,6 +180,16 @@ export default defineComponent({
 
       if (this.sprite != "link") {
         const patch = await this.getSpritePatch();
+        output = patch.apply(output);
+      }
+
+      if (this.palette != "green") {
+        const patch = await this.getPatch(`palette_${this.palette}`);
+        output = patch.apply(output);
+      }
+
+      if (this.heart_beeps) {
+        const patch = await this.getPatch("heartbeep");
         output = patch.apply(output);
       }
 

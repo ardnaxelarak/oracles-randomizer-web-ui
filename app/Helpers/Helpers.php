@@ -21,5 +21,30 @@ class Helpers
         }
         return null;
     }
+
+    public static function build_patch(string $symFile, array $patchYaml, string $game): string {
+        $patch = 'PATCH';
+
+        foreach ($patchYaml as $gamelabel => $section) {
+            if ($gamelabel != 'common' && $gamelabel != $game) {
+                continue;
+            }
+            foreach ($section as $label => $label_data) {
+                $address = Helpers::find_label($symFile, $label);
+
+                foreach ($label_data as $offset => $encoded_data) {
+                    $data = base64_decode($encoded_data);
+                    $start = $address + $offset;
+                    $patch .= pack('CCC', $start >> 16, ($start >> 8) & 0xFF, $start & 0xFF);
+                    $patch .= pack('n', strlen($data));
+                    $patch .= $data;
+                }
+            }
+        }
+
+        $patch .= 'EOF';
+
+        return $patch;
+    }
 }
 ?>

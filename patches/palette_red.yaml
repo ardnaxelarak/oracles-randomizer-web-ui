@@ -1,0 +1,19 @@
+ages:
+  oamData4c0a3:
+    0x4: Bvj4Agb4AAQGCPAGBgj4CAYIAAoG+BgAJvgQAib4CAQmCBgGJggQCCYY8ABGGPgCRhgABEYYGABmGBACZhgIBGYICAoGDvj4DAb4AA4GCPAQBgj4EgYIAAoG+BAMJvgIDiYIGBAmCBASJggICiYY+AxGGAAORhgQDGYYCA5m
+  oamData4c1e6:
+    0xc: AA==
+  oamData4c1f3:
+    0xc: IA==
+seasons:
+  oamData480a3:
+    0x4: B/j4Agf4AAQHCPAGBwj4CAcIAAoH+BgAJ/gQAif4CAQnCBgGJwgQCCcY8ABHGPgCRxgABEcYGABnGBACZxgIBGcICAoHDvj4DAf4AA4HCPAQBwj4EgcIAAoH+BAMJ/gIDicIGBAnCBASJwgICicY+AxHGAAORxgQDGcYCA5n
+  oamData481e6:
+    0xc: AA==
+  oamData481f3:
+    0xc: IA==
+common:
+  specialObjectSetOamVariables@data:
+    0x1: CnAKcApwCnAKcApwCnAKcApwCg==
+  fileSelectSpritePaletteData:
+    0x0: /38AAD8UX0f/fwAAA35fR/9/AAA/FF9H/38AAP8FX0c=

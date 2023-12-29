@@ -1,0 +1,3 @@
+common:
+  playHeartBeepAtInterval@timerCheck:
+    0x01: fw==

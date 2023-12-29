@@ -19,35 +19,29 @@ use Symfony\Component\Yaml\Yaml;
 |
 */
 
-Route::get('/sprites/{sprite}/{build}/{game}', function (string $sprite, string $build, string $game) {
+Route::get('/sprites/{build}/{game}/{sprite}', function (string $build, string $game, string $sprite) {
     $sprite = Yaml::parse(file_get_contents(base_path("sprites/$sprite.yaml")));
     if ($sprite) {
         $s3 = Storage::disk('s3');
         $sym = $s3->get("basepatch/$build/$game.sym");
 
         if ($sym) {
-            $patch = 'PATCH';
+            return Helpers::build_patch($sym, $sprite, $game);
+        }
+    }
 
-            foreach ($sprite as $gamelabel => $section) {
-                if ($gamelabel != 'common' && $gamelabel != $game) {
-                    continue;
-                }
-                foreach ($section as $label => $label_data) {
-                    $address = Helpers::find_label($sym, $label);
+    abort(404);
+});
 
-                    foreach ($label_data as $offset => $encoded_data) {
-                        $data = base64_decode($encoded_data);
-                        $start = $address + $offset;
-                        $patch .= pack('CCC', $start >> 16, ($start >> 8) & 0xFF, $start & 0xFF);
-                        $patch .= pack('n', strlen($data));
-                        $patch .= $data;
-                    }
-                }
-            }
+Route::get('/patches/{build}/{game}/{patch}', function (string $build, string $game, string $patch) {
+    $patch = Yaml::parse(file_get_contents(base_path("patches/$patch.yaml")));
+    Log::debug($patch);
+    if ($patch) {
+        $s3 = Storage::disk('s3');
+        $sym = $s3->get("basepatch/$build/$game.sym");
 
-            $patch .= 'EOF';
-
-            return response($patch)->header('Content-Type', 'application/octet-stream');
+        if ($sym) {
+            return Helpers::build_patch($sym, $patch, $game);
         }
     }
 
