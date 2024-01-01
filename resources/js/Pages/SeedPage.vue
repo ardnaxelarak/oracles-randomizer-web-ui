@@ -49,6 +49,7 @@
         <label class="form-label" for="sprite_select">Player Sprite</label>
         <select id="sprite_select" autocomplete="off" class="form-select" v-model="sprite">
           <option value="link">Link</option>
+          <option value="zoroark">Zoroark</option>
           <option value="marin">Marin</option>
           <option value="likelike">Like Like</option>
         </select>

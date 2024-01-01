@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Helpers\Helpers;
 use App\Models\BasePatch;
 use App\Models\Seed;
 use App\Support\Flips;
@@ -75,15 +76,6 @@ class Randomizer
         $generated = time();
         $basepatch = BasePatch::orderBy('id', 'desc')->first();
 
-        $flips = resolve(Flips::class);
-
-        $bps = $flips->createBps(base_path("vendor/oracles/disasm/$game.gbc"), $tmp_file);
-        $log = file_get_contents("${tmp_file}_log.txt");
-
-        // cleanup
-        unlink($tmp_file);
-        unlink("${tmp_file}_log.txt");
-
         $seed = new Seed;
         $seed->build = $basepatch->build;
         $seed->game = $game;
@@ -92,6 +84,25 @@ class Randomizer
         $seed->save();
 
         $hash = $seed->hash;
+
+        // Write seed hash to file select screen
+        $rom = file_get_contents($tmp_file);
+
+        $s3 = Storage::disk('s3');
+        $sym = $s3->get("basepatch/$basepatch->build/$game.sym");
+        $rom = $this->writeHashToRom($rom, $sym, $hash);
+
+        file_put_contents($tmp_file, $rom);
+
+        // Generate bps patch
+        $flips = resolve(Flips::class);
+
+        $bps = $flips->createBps(base_path("vendor/oracles/disasm/$game.gbc"), $tmp_file);
+        $log = file_get_contents("${tmp_file}_log.txt");
+
+        // cleanup
+        unlink($tmp_file);
+        unlink("${tmp_file}_log.txt");
 
         $storage = Storage::disk('s3');
         $storage->put("seeds/$hash-$generated.bps", $bps);
@@ -156,5 +167,37 @@ class Randomizer
         }
 
         return $metadata;
+    }
+
+    private function writeHashToRom(string $rom, string $symFile, string $hash) {
+        $addr = Helpers::find_label($symFile, 'randoFileSelectStringTiles');
+        $writeHash = substr($hash, 0, 16);
+        $writeHash = str_pad($writeHash, 16, " ", STR_PAD_BOTH);
+        $arr = $this->stringToTiles(substr($writeHash, 0, 16));
+        return substr_replace($rom, $arr, $addr + 0x22, 16);
+    }
+
+    private function stringToTiles(string $str): string {
+        $arr = "";
+        foreach (str_split($str) as $char) {
+            $ord = unpack('Cval', $char)["val"];
+            if ($char >= '0' && $char <= '9') {
+                $next = $ord - 0x20;
+            } else if ($char >= 'A' && $char <= 'Z') {
+                $next = $ord + 1;
+            } else if ($char >= 'a' && $char <= 'z') {
+                $next = $ord + 1;
+            } else if ($char == '+') {
+                $next = 0x5d;
+            } else if ($char == '-') {
+                $next = 0x5e;
+            } else if ($char == '.') {
+                $next = 0x5f;
+            } else {
+                $next = 0x5c;
+            }
+            $arr .= pack('C', $next);
+        }
+        return $arr;
     }
 }
