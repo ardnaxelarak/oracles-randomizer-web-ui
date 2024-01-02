@@ -39,6 +39,7 @@ class CreateRandomizedGame extends FormRequest
             'keysanity' => 'nullable|boolean',
             'auto_mermaid' => 'nullable|boolean',
             'dungeon_shuffle' => 'nullable|boolean',
+            'fools_ore' => 'nullable|int',
             'starting_items' => 'nullable|array',
             'starting_items.*' => Rule::in($valid_items),
         ];

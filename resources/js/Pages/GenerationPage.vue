@@ -44,6 +44,14 @@
           <input class="form-check-input" type="checkbox" autocomplete="off" role="switch" id="auto_mermaid" v-model="auto_mermaid">
           <label class="form-check-label" for="auto_mermaid">Auto Mermaid</label>
         </div>
+        <div class="form-inline">
+          <label class="form-label me-1" for="fools_ore">Fool's Ore: </label>
+          <select id="fools_ore" autocomplete="off" class="custom-select form-select-sm mt-1 mb-1 pe-2" v-model="fools_ore">
+            <option value="0">Not in Pool</option>
+            <option value="4">4 Damage</option>
+            <option value="12">12 Damage</option>
+          </select>
+        </div>
         <div class="form-check form-switch">
           <input class="form-check-input" type="checkbox" autocomplete="off" role="switch" id="starting_sword" v-model="starting_sword">
           <label class="form-check-label" for="starting_sword">Starting Sword</label>
@@ -84,6 +92,7 @@ export default defineComponent({
       dungeon_shuffle: false,
       portal_shuffle: false,
       auto_mermaid: true,
+      fools_ore: 0,
       starting_sword: false,
       starting_big_sword: false,
       starting_treasure_map: false,
@@ -115,6 +124,7 @@ export default defineComponent({
              keysanity: this.keysanity,
              dungeon_shuffle: this.dungeon_shuffle,
              auto_mermaid: this.auto_mermaid,
+             fools_ore: this.fools_ore,
              starting_items: starting_items,
           };
           if (this.game == 'seasons') {

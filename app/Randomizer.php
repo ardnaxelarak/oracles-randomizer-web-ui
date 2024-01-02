@@ -139,6 +139,11 @@ class Randomizer
             $flags[] = '-portals';
         }
 
+        $flags = array_merge($flags, [
+            '-oredamage',
+            Arr::get($this->metadata, 'settings.fools_ore', 0),
+        ]);
+
         if (count($this->metadata['settings']['starting_items']) > 0) {
             $itemlist = implode(';', $this->metadata['settings']['starting_items']);
             $flags[] = "-starting=$itemlist";
@@ -157,6 +162,7 @@ class Randomizer
                 'keysanity' => Arr::get($settings, 'keysanity', false),
                 'auto_mermaid' => Arr::get($settings, 'auto_mermaid', false),
                 'dungeon_shuffle' => Arr::get($settings, 'dungeon_shuffle', false),
+                'fools_ore' => Arr::get($settings, 'fools_ore', 0),
                 'starting_items' => Arr::get($settings, 'starting_items', []),
             ],
             'race' => false,
