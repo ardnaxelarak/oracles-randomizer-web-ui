@@ -17,6 +17,9 @@
         <div v-if="metadata?.settings?.hard != null">
           Difficulty: {{ metadata.settings.hard ? "Hard" : "Normal" }}
         </div>
+        <div v-if="metadata?.settings?.essences != null">
+          Essences for Maku Seed: {{ metadata.settings.essences }}
+        </div>
         <div v-if="metadata?.settings?.cross_items != null">
           Cross Items: {{ metadata.settings.cross_items ? "True" : "False" }}
         </div>
@@ -25,6 +28,9 @@
         </div>
         <div v-if="metadata?.settings?.maple_item != null">
           Maple Item: {{ metadata.settings.maple_item ? "True" : "False" }}
+        </div>
+        <div v-if="metadata?.settings?.gasha_item != null">
+          Gasha Nut Item: {{ metadata.settings.gasha_item ? "True" : "False" }}
         </div>
         <div v-if="metadata?.settings?.keysanity != null">
           Keysanity: {{ metadata.settings.keysanity ? "True" : "False" }}
@@ -52,6 +58,8 @@
           <option value="zoroark">Zoroark</option>
           <option value="marin">Marin</option>
           <option value="likelike">Like Like</option>
+          <option value="subrosian">Subrosian</option>
+          <option value="goron">Goron</option>
         </select>
         <label class="form-label" for="palette_select">Player Sprite</label>
         <select id="palette_select" autocomplete="off" class="form-select" v-model="palette">

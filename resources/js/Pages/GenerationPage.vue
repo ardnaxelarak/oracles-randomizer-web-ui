@@ -16,6 +16,19 @@
           <input class="form-check-input" type="checkbox" autocomplete="off" role="switch" id="hard_mode" v-model="hard">
           <label class="form-check-label" for="hard_mode">Hard Mode</label>
         </div>
+        <div class="form-inline">
+          <label class="form-label me-1" for="essences">Essences for Maku Seed</label>
+          <select id="essences" autocomplete="off" class="custom-select form-select-sm mt-1 mb-1 pe-2" v-model="essences">
+            <option value="8">8 Essences</option>
+            <option value="7">7 Essences</option>
+            <option value="6">6 Essences</option>
+            <option value="5">5 Essences</option>
+            <option value="4">4 Essences</option>
+            <option value="3">3 Essences</option>
+            <option value="2">2 Essences</option>
+            <option value="1">1 Essence</option>
+          </select>
+        </div>
         <div class="form-check form-switch">
           <input class="form-check-input" type="checkbox" autocomplete="off" role="switch" id="cross_items" v-model="cross_items">
           <label class="form-check-label" for="cross_items">Cross Items</label>
@@ -27,6 +40,10 @@
         <div class="form-check form-switch">
           <input class="form-check-input" type="checkbox" autocomplete="off" role="switch" id="maple_item" v-model="maple_item">
           <label class="form-check-label" for="maple_item">Include Maple Item</label>
+        </div>
+        <div class="form-check form-switch">
+          <input class="form-check-input" type="checkbox" autocomplete="off" role="switch" id="gasha_item" v-model="gasha_item">
+          <label class="form-check-label" for="gasha_item">Include Gasha Nut Item</label>
         </div>
         <div class="form-check form-switch">
           <input class="form-check-input" type="checkbox" autocomplete="off" role="switch" id="keysanity" v-model="keysanity">
@@ -48,21 +65,42 @@
           <label class="form-label me-1" for="fools_ore">Fool's Ore: </label>
           <select id="fools_ore" autocomplete="off" class="custom-select form-select-sm mt-1 mb-1 pe-2" v-model="fools_ore">
             <option value="0">Not in Pool</option>
-            <option value="4">4 Damage</option>
-            <option value="12">12 Damage</option>
+            <option value="4">4 Damage (balanced)</option>
+            <option value="12">12 Damage (vanilla)</option>
           </select>
         </div>
+        <p class="mb-1 mt-1"><b>Starting Items:</b></p>
         <div class="form-check form-switch">
           <input class="form-check-input" type="checkbox" autocomplete="off" role="switch" id="starting_sword" v-model="starting_sword">
-          <label class="form-check-label" for="starting_sword">Starting Sword</label>
+          <label class="form-check-label" for="starting_sword">Sword</label>
         </div>
         <div class="form-check form-switch">
           <input class="form-check-input" type="checkbox" autocomplete="off" role="switch" id="starting_big_sword" v-model="starting_big_sword">
-          <label class="form-check-label" for="starting_big_sword">Starting Biggoron's Sword</label>
+          <label class="form-check-label" for="starting_big_sword">Biggoron's Sword</label>
         </div>
         <div class="form-check form-switch" v-if="game == 'seasons'">
           <input class="form-check-input" type="checkbox" autocomplete="off" role="switch" id="starting_treasure_map" v-model="starting_treasure_map">
-          <label class="form-check-label" for="starting_treasure_map">Starting Treasure Map</label>
+          <label class="form-check-label" for="starting_treasure_map">Treasure Map</label>
+        </div>
+        <div class="form-check form-switch">
+          <input class="form-check-input" type="checkbox" autocomplete="off" role="switch" id="starting_small_keys" v-model="starting_small_keys">
+          <label class="form-check-label" for="starting_small_keys">All Small Keys</label>
+        </div>
+        <div class="form-check form-switch">
+          <input class="form-check-input" type="checkbox" autocomplete="off" role="switch" id="starting_boss_keys" v-model="starting_boss_keys">
+          <label class="form-check-label" for="starting_boss_keys">All Boss Keys</label>
+        </div>
+        <div class="form-check form-switch">
+          <input class="form-check-input" type="checkbox" autocomplete="off" role="switch" id="starting_compasses" v-model="starting_compasses">
+          <label class="form-check-label" for="starting_compasses">All Compasses</label>
+        </div>
+        <div class="form-check form-switch">
+          <input class="form-check-input" type="checkbox" autocomplete="off" role="switch" id="starting_maps" v-model="starting_maps">
+          <label class="form-check-label" for="starting_maps">All Dungeon Maps</label>
+        </div>
+        <div class="form-check form-switch" v-if="game == 'ages'">
+          <input class="form-check-input" type="checkbox" autocomplete="off" role="switch" id="starting_slates" v-model="starting_slates">
+          <label class="form-check-label" for="starting_slates">Slates</label>
         </div>
       </li>
       <li class="list-group-item">
@@ -85,9 +123,11 @@ export default defineComponent({
       generating: false,
       game: "ages",
       hard: false,
+      essences: 8,
       cross_items: false,
       linked_items: false,
       maple_item: false,
+      gasha_item: false,
       keysanity: false,
       dungeon_shuffle: false,
       portal_shuffle: false,
@@ -96,6 +136,11 @@ export default defineComponent({
       starting_sword: false,
       starting_big_sword: false,
       starting_treasure_map: false,
+      starting_small_keys: false,
+      starting_boss_keys: false,
+      starting_compasses: false,
+      starting_maps: false,
+      starting_slates: false,
     };
   },
   methods: {
@@ -112,6 +157,21 @@ export default defineComponent({
           if (this.starting_big_sword) {
             starting_items.push("biggoron's sword");
           }
+          if (this.starting_small_keys) {
+            starting_items.push("small keys");
+          }
+          if (this.starting_boss_keys) {
+            starting_items.push("boss keys");
+          }
+          if (this.starting_compasses) {
+            starting_items.push("compasses");
+          }
+          if (this.starting_maps) {
+            starting_items.push("dungeon maps");
+          }
+          if (this.game == 'ages' && this.starting_slates) {
+            starting_items.push("slates");
+          }
           if (this.game == 'seasons' && this.starting_treasure_map) {
             starting_items.push("treasure map");
           }
@@ -121,10 +181,12 @@ export default defineComponent({
              cross_items: this.cross_items,
              linked_items: this.linked_items,
              maple_item: this.maple_item,
+             gasha_item: this.gasha_item,
              keysanity: this.keysanity,
              dungeon_shuffle: this.dungeon_shuffle,
              auto_mermaid: this.auto_mermaid,
              fools_ore: this.fools_ore,
+             essences: this.essences,
              starting_items: starting_items,
           };
           if (this.game == 'seasons') {
@@ -156,7 +218,7 @@ export default defineComponent({
 });
 </script>
 
-<style>
+<style scoped>
 .content-div {
   width: 30rem;
   margin: auto;

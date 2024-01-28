@@ -126,6 +126,9 @@ class Randomizer
         if (Arr::get($this->metadata, 'settings.maple_item', false)) {
             $flags[] = '-maple';
         }
+        if (Arr::get($this->metadata, 'settings.gasha_item', false)) {
+            $flags[] = '-gasha';
+        }
         if (Arr::get($this->metadata, 'settings.keysanity', false)) {
             $flags[] = '-keysanity';
         }
@@ -144,6 +147,11 @@ class Randomizer
             Arr::get($this->metadata, 'settings.fools_ore', 0),
         ]);
 
+        $flags = array_merge($flags, [
+            '-essences',
+            Arr::get($this->metadata, 'settings.essences', 8),
+        ]);
+
         if (count($this->metadata['settings']['starting_items']) > 0) {
             $itemlist = implode(';', $this->metadata['settings']['starting_items']);
             $flags[] = "-starting=$itemlist";
@@ -159,10 +167,12 @@ class Randomizer
                 'linked_items' => Arr::get($settings, 'linked_items', false),
                 'cross_items' => Arr::get($settings, 'cross_items', false),
                 'maple_item' => Arr::get($settings, 'maple_item', false),
+                'gasha_item' => Arr::get($settings, 'gasha_item', false),
                 'keysanity' => Arr::get($settings, 'keysanity', false),
                 'auto_mermaid' => Arr::get($settings, 'auto_mermaid', false),
                 'dungeon_shuffle' => Arr::get($settings, 'dungeon_shuffle', false),
                 'fools_ore' => Arr::get($settings, 'fools_ore', 0),
+                'essences' => Arr::get($settings, 'essences', 8),
                 'starting_items' => Arr::get($settings, 'starting_items', []),
             ],
             'race' => false,

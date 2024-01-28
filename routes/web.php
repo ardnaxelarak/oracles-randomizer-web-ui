@@ -44,3 +44,7 @@ Route::get('h/{hash}', static function ($hash) {
 Route::get('generate', static function () {
     return Inertia::render('GenerationPage', []);
 });
+
+Route::get('versions', static function () {
+    return Inertia::render('RandomizerVersionsPage', []);
+});

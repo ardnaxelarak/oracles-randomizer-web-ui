@@ -27,9 +27,15 @@ class CreateRandomizedGame extends FormRequest
      */
     public function rules()
     {
-        $treasures = Yaml::parse(file_get_contents(base_path('vendor/oracles/randomizer/romdata/treasures.yaml')));
+        $startingData = Yaml::parse(file_get_contents(base_path('vendor/oracles/randomizer/romdata/startingData.yaml')));
+        $startingPacks = Yaml::parse(file_get_contents(base_path('vendor/oracles/randomizer/romdata/startingPacks.yaml')));
         $rings = Yaml::parse(file_get_contents(base_path('vendor/oracles/randomizer/romdata/rings.yaml')));
-        $valid_items = array_merge(array_keys($treasures['common']), array_keys($treasures[Request::get('game')]), $rings);
+        $valid_items = array_merge(
+            array_keys($startingData['common']),
+            array_keys($startingData[Request::get('game')]),
+            array_keys($startingPacks[Request::get('game')]),
+            $rings,
+        );
 
         return [
             'game' => Rule::enum(Game::class),
@@ -40,6 +46,7 @@ class CreateRandomizedGame extends FormRequest
             'auto_mermaid' => 'nullable|boolean',
             'dungeon_shuffle' => 'nullable|boolean',
             'fools_ore' => 'nullable|int',
+            'essences' => 'nullable|int',
             'starting_items' => 'nullable|array',
             'starting_items.*' => Rule::in($valid_items),
         ];
