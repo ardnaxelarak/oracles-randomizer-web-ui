@@ -55,10 +55,12 @@
         <label class="form-label" for="sprite_select">Player Sprite</label>
         <select id="sprite_select" autocomplete="off" class="form-select" v-model="sprite">
           <option value="link">Link</option>
+          <option value="darklink">Dark Link</option>
           <option value="zoroark">Zoroark</option>
           <option value="marin">Marin</option>
           <option value="likelike">Like Like</option>
           <option value="subrosian">Subrosian</option>
+          <option value="rosa">Rosa</option>
           <option value="goron">Goron</option>
         </select>
         <label class="form-label" for="palette_select">Player Sprite</label>
@@ -73,6 +75,10 @@
         <div class="form-check form-switch">
           <input class="form-check-input" type="checkbox" autocomplete="off" role="switch" id="heart_beeps" v-model="heart_beeps">
           <label class="form-check-label" for="heart_beeps">Half-Speed Low Health Beep</label>
+        </div>
+        <div class="form-check form-switch">
+          <input class="form-check-input" type="checkbox" autocomplete="off" role="switch" id="silent_glove" v-model="silent_glove">
+          <label class="form-check-label" for="silent_glove">Silence Magnet Gloves</label>
         </div>
       </li>
       <li class="list-group-item">
@@ -118,6 +124,7 @@ export default defineComponent({
       sprite: "link",
       palette: "green",
       heart_beeps: true,
+      silent_glove: true,
     };
   },
   computed: {
@@ -208,6 +215,11 @@ export default defineComponent({
 
       if (this.heart_beeps) {
         const patch = await this.getPatch("heartbeep");
+        output = patch.apply(output);
+      }
+
+      if (this.silent_glove) {
+        const patch = await this.getPatch("silentgloves");
         output = patch.apply(output);
       }
 
