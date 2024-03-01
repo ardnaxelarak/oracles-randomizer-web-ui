@@ -55,13 +55,14 @@
         <label class="form-label" for="sprite_select">Player Sprite</label>
         <select id="sprite_select" autocomplete="off" class="form-select" v-model="sprite">
           <option value="link">Link</option>
-          <option value="darklink">Dark Link</option>
+          <option value="darklink">Dark Link (OoT)</option>
           <option value="zoroark">Zoroark</option>
           <option value="marin">Marin</option>
           <option value="likelike">Like Like</option>
           <option value="subrosian">Subrosian</option>
           <option value="rosa">Rosa</option>
           <option value="goron">Goron</option>
+          <option value="Piratian">Piratian</option>
         </select>
         <label class="form-label" for="palette_select">Player Sprite</label>
         <select id="palette_select" autocomplete="off" class="form-select" v-model="palette">

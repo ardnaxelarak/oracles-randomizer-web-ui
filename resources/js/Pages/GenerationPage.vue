@@ -71,6 +71,14 @@
         </div>
         <p class="mb-1 mt-1"><b>Starting Items:</b></p>
         <div class="form-check form-switch">
+          <input class="form-check-input" type="checkbox" autocomplete="off" role="switch" id="starting_fist_ring" v-model="starting_fist_ring">
+          <label class="form-check-label" for="starting_fist_ring">Fist Ring</label>
+        </div>
+        <div class="form-check form-switch">
+          <input class="form-check-input" type="checkbox" autocomplete="off" role="switch" id="starting_expert_ring" v-model="starting_expert_ring">
+          <label class="form-check-label" for="starting_expert_ring">Expert's Ring</label>
+        </div>
+        <div class="form-check form-switch">
           <input class="form-check-input" type="checkbox" autocomplete="off" role="switch" id="starting_sword" v-model="starting_sword">
           <label class="form-check-label" for="starting_sword">Sword</label>
         </div>
@@ -101,6 +109,10 @@
         <div class="form-check form-switch" v-if="game == 'ages'">
           <input class="form-check-input" type="checkbox" autocomplete="off" role="switch" id="starting_slates" v-model="starting_slates">
           <label class="form-check-label" for="starting_slates">Slates</label>
+        </div>
+        <div class="form-check form-switch">
+          <input class="form-check-input" type="checkbox" autocomplete="off" role="switch" id="starting_snowshoe_ring" v-model="starting_snowshoe_ring">
+          <label class="form-check-label" for="starting_snowshoe_ring">Snowshoe Ring</label>
         </div>
       </li>
       <li class="list-group-item">
@@ -133,6 +145,8 @@ export default defineComponent({
       portal_shuffle: false,
       auto_mermaid: true,
       fools_ore: 0,
+      starting_fist_ring: false,
+      starting_expert_ring: false,
       starting_sword: false,
       starting_big_sword: false,
       starting_treasure_map: false,
@@ -141,6 +155,7 @@ export default defineComponent({
       starting_compasses: false,
       starting_maps: false,
       starting_slates: false,
+      starting_snowshoe_ring: false,
     };
   },
   methods: {
@@ -151,6 +166,12 @@ export default defineComponent({
       return new Promise(
         function(resolve, reject) {
           const starting_items = [];
+          if (this.starting_fist_ring) {
+            starting_items.push("fist ring");
+          }
+          if (this.starting_expert_ring) {
+            starting_items.push("expert's ring");
+          }
           if (this.starting_sword) {
             starting_items.push("sword");
           }
@@ -174,6 +195,9 @@ export default defineComponent({
           }
           if (this.game == 'seasons' && this.starting_treasure_map) {
             starting_items.push("treasure map");
+          }
+          if (this.starting_snowshoe_ring) {
+            starting_items.push("snowshoe ring");
           }
           const settings = {
              game: this.game,
